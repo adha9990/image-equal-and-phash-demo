@@ -39,28 +39,3 @@ class DuplicateChecker {
     return result;
   }
 }
-
-(async () => {
-  const filePaths = await fetch("./images.json").then((res) => res.json());
-
-  console.log(`圖片數量:`, filePaths.length, `筆資料`);
-
-  const items = generateEagleItem(filePaths);
-
-  const fingerprintMap = {};
-
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    const filePath = item.filePath;
-    const fingerprint = await pHash(filePath);
-    fingerprintMap[filePath] = fingerprint;
-
-    console.log(fingerprint);
-
-    item.fingerprint = fingerprint;
-  }
-
-  const result = DuplicateChecker.findSimilarFiles(items);
-
-  console.log(result);
-})();

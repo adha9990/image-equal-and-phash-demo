@@ -1,13 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+      }
+    </style>
   </head>
   <body>
-    <div id="counter"></div>
+    <input type="range" oninput="change(event.target.value / 100)" max="100" min="0" value="90" step="1" />
+    <div class="bbb">0.9</div>
+    <div id="area"></div>
     <script src="./pHash.js"></script>
     <script src="./script.js"></script>
+    <script>
+      let items = [];
+      let result = [];
+
+      const change = (value) => {
+        document.querySelector(".bbb").innerHTML = value;
+        const area = document.getElementById("area");
+        area.innerHTML = "";
+        result = DuplicateChecker.findSimilarFiles(items, value);
+
+        const table = document.createElement("table");
+        const tbody = document.createElement("tbody");
+        for (let i of result) {
+          const tr = document.createElement("tr");
+          for (let j of i) {
+            const td = document.createElement("td");
+            const img = document.createElement("img");
+            img.style.height = "100px";
+            img.src = j.filePath;
+            td.appendChild(img);
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+        area.appendChild(table);
+      };
+
+      window.onload = () => {
+        const body = document.querySelector("body");
+
+        body.addEventListener("dragover", function (e) {
+          e.preventDefault();
+        });
+
+        body.addEventListener("drop", async function (e) {
+          e.preventDefault();
+          const files = e.dataTransfer.files;
+
+          console.log(`圖片數量:`, files.length, `筆資料`);
+
+          const filePaths = [];
+
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            await new Promise((resolve) => {
+              reader.onload = function (e) {
+                filePaths.push(e.target.result);
+                resolve();
+              };
+            });
+          }
+
+          items = generateEagleItem(filePaths);
+
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const filePath = item.filePath;
+            const fingerprint = await pHash(filePath);
+
+            console.log(fingerprint);
+
+            item.fingerprint = fingerprint;
+          }
+
+          body.innerHTML = `<input type="range" oninput="change(event.target.value / 100)" max="100" min="0" value="90" step="1" />
+          <div class="bbb">0.9</div><div id="area"></div>`;
+          change(0.9);
+        });
+      };
+    </script>
   </body>
 </html>
