@@ -47,8 +47,4 @@ module.exports = class DuplicateChecker {
 
     return result;
   }
-  //   找到相似的文件
-  static findSimilarFiles(filePaths, similarity) {
-    console.log("findSimilarFiles");
-  }
 };

@@ -2,7 +2,7 @@ const { getFilePathsInDirectory, getExecutionTime, generateEagleItem } = require
 
 const duplicateChecker = require("./duplicateChecker");
 
-const filePaths = getFilePathsInDirectory("./images/test");
+const filePaths = getFilePathsInDirectory("./images");
 
 const items = generateEagleItem(filePaths);
 

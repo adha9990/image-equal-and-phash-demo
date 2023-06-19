@@ -3,6 +3,7 @@ const crypto = require("node:crypto");
 const path = require("node:path");
 
 module.exports = {
+  // 取得目錄下所有檔案路徑
   getFilePathsInDirectory: (directoryPath) => {
     const filepaths = [];
 
@@ -46,6 +47,7 @@ module.exports = {
       fs.closeSync(fileDescriptor);
     }
   },
+  // 取得程式碼執行時間
   getExecutionTime: async (callback) => {
     const startTime = performance.now();
 
@@ -59,13 +61,13 @@ module.exports = {
 
     return diffTime;
   },
+  // 生成 EagleItem
   generateEagleItem: (filePaths) => {
     return filePaths.map((filePath) => {
       return {
         id: crypto.randomBytes(16).toString("hex"),
         filePath: filePath,
         size: fs.statSync(filePath).size,
-        hash: "",
       };
     });
   },
