@@ -1,4 +1,3 @@
-const fs = require("node:fs");
 const crypto = require("node:crypto");
 
 const { readChunkSync } = require("./utils");
