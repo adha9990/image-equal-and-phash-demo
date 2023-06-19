@@ -1,4 +1,5 @@
 const fs = require("node:fs");
+const crypto = require("node:crypto");
 const path = require("node:path");
 
 module.exports = {
@@ -57,5 +58,15 @@ module.exports = {
     console.log("程式碼執行時間:", diffTime, "毫秒");
 
     return diffTime;
+  },
+  generateEagleItem: (filePaths) => {
+    return filePaths.map((filePath) => {
+      return {
+        id: crypto.randomBytes(16).toString("hex"),
+        filePath: filePath,
+        size: fs.statSync(filePath).size,
+        hash: "",
+      };
+    });
   },
 };
