@@ -24,7 +24,7 @@ class DuplicateChecker {
 
         const similarity = getCosineSimilarity(fingerprintA, fingerprintB);
 
-        if (similarity > fingerprintWeighted) {
+        if (similarity >= fingerprintWeighted) {
           similarities.push(itemB);
           cloneItems.splice(i, 1);
           i--;
